@@ -1,5 +1,7 @@
 # dsh-model-select-style
 
+> ⚠️ **已弃用（Deprecated）**：功能已合并进 [dsh-ui-tools](https://github.com/qgx1992/dsh-ui-tools)（模型选择双按钮为其「功能一」），请改用 dsh-ui-tools。本仓库不再维护。
+
 DSH Web 插件：把输入框官方的「模型选择」控件替换为**两个独立按钮**（供应商选择 + 模型选择），两级联动，不触碰其他界面元素，不改 DSH 任何一行源码。
 
 ## 交互方式
