@@ -1,0 +1,14 @@
+# 依赖与安装产物
+node_modules/
+*.tgz
+
+# 本地调试产物
+*.local
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.vscode/
+.idea/

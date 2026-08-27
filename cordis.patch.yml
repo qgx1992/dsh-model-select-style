@@ -1,0 +1,5 @@
+# dsh-model-select-style bundle patch: inserts the plugin into the loader
+# so its client bundle gets composed and served at /plugins/<id>/client.js.
+- insert:
+    - id: model-select-style
+      name: 'dsh-model-select-style'

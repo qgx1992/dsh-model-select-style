@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>dsh-model-select-style 效果对照</title>
+<style>
+  /* ---- 模拟 DSH 主题变量（与官方 theme 包一致的取值） ---- */
+  :root {
+    --dsw-alias-brand-primary: #4176e6;
+    --dsw-alias-brand-text: #4176e6;
+    --dsw-alias-label-primary: #1f2329;
+    --dsw-alias-label-secondary: #5c6470;
+    --dsw-alias-label-caption: #8a919e;
+    --dsw-alias-label-tertiary: #a1a8b3;
+    --dsw-alias-interactive-bg-hover: rgba(31, 35, 41, 0.06);
+    --dsw-alias-interactive-bg-active: rgba(31, 35, 41, 0.10);
+    --dsw-alias-border-l2: #e3e6eb;
+    --dsw-alias-border-l3: #d3d7de;
+    --dsw-specific-menu: #ffffff;
+    --dsw-alias-bg-layer-2: #ffffff;
+    --dsw-shadow-lv3: 0 12px 32px rgba(15, 17, 21, 0.16);
+  }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: #f3f4f6;
+    margin: 0; padding: 32px 24px;
+    color: var(--dsw-alias-label-primary);
+  }
+  h1 { font-size: 16px; margin: 0 0 4px; }
+  .sub { font-size: 12px; color: var(--dsw-alias-label-secondary); margin-bottom: 24px; }
+  .row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .card {
+    flex: 1 1 420px; max-width: 560px;
+    background: #fff; border: 1px solid var(--dsw-alias-border-l2);
+    border-radius: 12px; padding: 16px;
+  }
+  .card h2 { font-size: 13px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #eef1f6; color: #5c6470; }
+  .tag.plug { background: #e4edfd; color: #2563eb; }
+  /* 模拟 composer 输入框区域 */
+  .composer {
+    border: 1px solid var(--dsw-alias-border-l3);
+    border-radius: 12px; background: #fff;
+    padding: 12px 12px 8px; min-height: 120px;
+  }
+  .composer .placeholder { color: var(--dsw-alias-label-tertiary); font-size: 13px; }
+  .composer .footer {
+    display: flex; justify-content: flex-end; align-items: center;
+    padding-top: 10px; gap: 8px;
+  }
+
+  /* ============ 官方 ModelSelect 的 CSS（哈希类，真实构建产物） ============ */
+  ._7KE1Ra_root { min-width: 0; position: relative; }
+  ._7KE1Ra_trigger {
+    min-width: 0; max-width: min(360px, 45cqw); height: 28px;
+    color: var(--dsw-alias-label-secondary); cursor: pointer; background: 0 0;
+    border: none; border-radius: 24px; outline: none; align-items: center;
+    gap: 4px; padding: 0 4px 0 8px; font-size: 13px; font-weight: 500;
+    line-height: 20px; display: flex;
+  }
+  ._7KE1Ra_trigger:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
+  ._7KE1Ra_trigger:focus-visible { box-shadow: 0 0 0 2px var(--dsw-alias-border-l3); }
+  ._7KE1Ra_triggerLabel { text-overflow: ellipsis; white-space: nowrap; min-width: 0; overflow: hidden; }
+  ._7KE1Ra_triggerEffort { color: var(--dsw-alias-label-caption); flex: none; }
+  ._7KE1Ra_chevron { color: var(--dsw-alias-label-caption); flex: none; transition: transform .12s; }
+  ._7KE1Ra_menu {
+    z-index: 20; border: 1px solid var(--dsw-alias-border-inverted, #d3d7de);
+    background: var(--dsw-specific-menu); width: max-content; min-width: 240px;
+    max-width: min(420px, 100vw - 32px); max-height: 320px;
+    box-shadow: var(--dsw-shadow-lv3); color: var(--dsw-alias-label-primary);
+    border-radius: 12px; flex-direction: column; padding: 4px; display: flex;
+    position: absolute; bottom: calc(100% + 8px); right: 0; overflow: hidden;
+  }
+  /* demo 专用：把菜单改成向下弹出，避免盖住触发按钮（真实 DSH 是向上弹出） */
+  .menu-down ._7KE1Ra_menu {
+    bottom: auto; top: calc(100% + 8px);
+  }
+  ._7KE1Ra_groupTitle { color: var(--dsw-alias-label-tertiary); padding: 6px 10px 2px; font-size: 11px; line-height: 18px; }
+  ._7KE1Ra_option {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    width: 100%; border: none; background: none; color: inherit; font: inherit;
+    text-align: left; padding: 7px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; line-height: 20px;
+  }
+  ._7KE1Ra_option:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
+  ._7KE1Ra_selected { background: rgba(65, 118, 230, 0.08); }
+  ._7KE1Ra_modelName { font-weight: 500; }
+  ._7KE1Ra_description { display: block; color: var(--dsw-alias-label-caption); font-size: 12px; }
+  ._7KE1Ra_check { color: var(--dsw-alias-label-secondary); flex: none; }
+  ._7KE1Ra_optionCopy { min-width: 0; display: flex; flex-direction: column; }
+
+  /* 菜单：原生卡片是静态的，这个 demo 里直接显示展开态 */
+  .spacer { height: 8px; }
+  .menu-holder { position: relative; height: 0; }
+  .menu-open { position: absolute; bottom: 0; right: 0; }
+
+  /* ============ 插件注入的 CSS（与 lib/client.js 生成的规则一致） ============ */
+  div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+  div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"]) {
+    --mss-accent: var(--dsw-alias-brand-primary);
+    --mss-accent-text: var(--dsw-alias-brand-text, var(--dsw-alias-brand-primary));
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"],
+  button[aria-haspopup="menu"][aria-label^="Select model"] {
+    height: 30px; padding: 0 9px; border-radius: 999px;
+    background: color-mix(in srgb, var(--mss-accent) 8%, transparent);
+    color: var(--mss-accent-text); font-weight: 600;
+    max-width: min(480px, 55cqw);
+    transition: background .18s cubic-bezier(.4,0,.2,1), box-shadow .18s cubic-bezier(.4,0,.2,1), transform .18s cubic-bezier(.4,0,.2,1);
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"]:hover:not(:disabled),
+  button[aria-haspopup="menu"][aria-label^="Select model"]:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--mss-accent) 16%, transparent);
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"]:active:not(:disabled),
+  button[aria-haspopup="menu"][aria-label^="Select model"]:active:not(:disabled) { transform: scale(.97); }
+  button[aria-haspopup="menu"][aria-label^="选择模型"]:focus-visible,
+  button[aria-haspopup="menu"][aria-label^="Select model"]:focus-visible {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--mss-accent) 55%, transparent); outline: none;
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"] [class$="_chevron"],
+  button[aria-haspopup="menu"][aria-label^="Select model"] [class$="_chevron"] { color: inherit; }
+  button[aria-haspopup="menu"][aria-label^="选择模型"] [data-mss-provider-badge],
+  button[aria-haspopup="menu"][aria-label^="Select model"] [data-mss-provider-badge] {
+    flex: 0 2 auto; min-width: 0; margin-right: 3px; padding: 0 6px; border-radius: 999px;
+    background: color-mix(in srgb, var(--mss-accent) 10%, transparent);
+    color: var(--mss-accent-text); font-size: 11px; font-weight: 600;
+    line-height: 18px; max-width: 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"] [class$="_triggerLabel"],
+  button[aria-haspopup="menu"][aria-label^="Select model"] [class$="_triggerLabel"] {
+    flex: 1 1 auto; min-width: 0; font-weight: 600;
+  }
+  button[aria-haspopup="menu"][aria-label^="选择模型"] > [class$="_triggerEffort"],
+  button[aria-haspopup="menu"][aria-label^="Select model"] > [class$="_triggerEffort"] {
+    flex: none; margin-left: 2px; padding: 0 6px; border-radius: 999px;
+    background: color-mix(in srgb, var(--mss-accent) 12%, transparent);
+    font-size: 11px; line-height: 18px;
+  }
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] {
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--dsw-specific-menu, var(--dsw-alias-bg-layer-2)) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(1.35);
+    -webkit-backdrop-filter: blur(14px) saturate(1.35);
+    animation: mss-menu-in .18s cubic-bezier(.4,0,.2,1) ease-out;
+    transform-origin: bottom right;
+  }
+  @keyframes mss-menu-in {
+    from { opacity: 0; transform: translateY(4px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+  }
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] [class$="_cell"],
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] [class$="_option"] {
+    border-radius: 10px; transition: background .18s cubic-bezier(.4,0,.2,1);
+  }
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] [class$="_selected"] {
+    background: color-mix(in srgb, var(--mss-accent) 12%, transparent);
+  }
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] [class$="_selected"] [class$="_check"] {
+    color: var(--mss-accent-text);
+  }
+  :is(div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="选择模型"]),
+      div[class$="_root"]:has(> button[aria-haspopup="menu"][aria-label^="Select model"])) > div[role="menu"] button:focus-visible {
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--mss-accent) 55%, transparent);
+    outline: none;
+  }
+  .narrow-note { font-size: 12px; color: var(--dsw-alias-label-tertiary); margin-top: 10px; line-height: 18px; }
+  .narrow-demo { margin-top: 12px; }
+</style>
+</head>
+<body>
+  <h1>dsh-model-select-style 效果对照</h1>
+  <div class="sub">左：DSH 原生样式 &nbsp;·&nbsp; 右：插件注入后（同一 DOM，仅追加 CSS）</div>
+  <div class="row">
+    <!-- 原生 -->
+    <div class="card">
+      <h2>原生样式 <span class="tag">before</span></h2>
+      <div class="composer">
+        <div class="placeholder">输入消息…</div>
+        <div class="footer">
+          <div class="_7KE1Ra_root menu-down">
+            <button class="_7KE1Ra_trigger" type="button" aria-haspopup="menu" aria-label="选择模型，当前 deepseek-chat，推理等级 高" aria-expanded="true">
+              <span class="_7KE1Ra_triggerLabel">deepseek-chat</span>
+              <span class="_7KE1Ra_triggerEffort">高</span>
+              <svg class="_7KE1Ra_chevron" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25 7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-holder">
+              <div class="menu-open _7KE1Ra_menu" role="menu" aria-label="模型与推理等级">
+                <div class="_7KE1Ra_groupTitle">DeepSeek</div>
+                <button class="_7KE1Ra_option _7KE1Ra_selected" type="button" role="menuitemradio" aria-checked="true">
+                  <span class="_7KE1Ra_optionCopy"><span class="_7KE1Ra_modelName">deepseek-chat</span><span class="_7KE1Ra_description">通用对话</span></span>
+                  <span class="_7KE1Ra_check">✓</span>
+                </button>
+                <button class="_7KE1Ra_option" type="button" role="menuitemradio" aria-checked="false">
+                  <span class="_7KE1Ra_optionCopy"><span class="_7KE1Ra_modelName">deepseek-reasoner</span><span class="_7KE1Ra_description">深度推理</span></span>
+                  <span class="_7KE1Ra_check"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 插件样式 -->
+    <div class="card">
+      <h2>插件样式 <span class="tag plug">after</span></h2>
+      <div class="composer">
+        <div class="placeholder">输入消息…</div>
+        <div class="footer">
+          <div class="_7KE1Ra_root menu-down">
+            <button class="_7KE1Ra_trigger" type="button" aria-haspopup="menu" aria-label="选择模型，当前 deepseek-chat，推理等级 高" aria-expanded="true">
+              <span data-mss-provider-badge>DeepSeek</span>
+              <span class="_7KE1Ra_triggerLabel">deepseek-chat</span>
+              <span class="_7KE1Ra_triggerEffort">高</span>
+              <svg class="_7KE1Ra_chevron" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25 7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-holder">
+              <div class="menu-open _7KE1Ra_menu" role="menu" aria-label="模型与推理等级">
+                <div class="_7KE1Ra_groupTitle">DeepSeek</div>
+                <button class="_7KE1Ra_option _7KE1Ra_selected" type="button" role="menuitemradio" aria-checked="true">
+                  <span class="_7KE1Ra_optionCopy"><span class="_7KE1Ra_modelName">deepseek-chat</span><span class="_7KE1Ra_description">通用对话</span></span>
+                  <span class="_7KE1Ra_check">✓</span>
+                </button>
+                <button class="_7KE1Ra_option" type="button" role="menuitemradio" aria-checked="false">
+                  <span class="_7KE1Ra_optionCopy"><span class="_7KE1Ra_modelName">deepseek-reasoner</span><span class="_7KE1Ra_description">深度推理</span></span>
+                  <span class="_7KE1Ra_check"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 窄空间自适应示例 -->
+    <div class="card">
+      <h2>窄空间自适应 <span class="tag plug">narrow</span></h2>
+      <div class="composer">
+        <div class="placeholder">输入消息…</div>
+        <div class="footer">
+          <div class="_7KE1Ra_root" style="max-width: 100%;">
+            <button class="_7KE1Ra_trigger" type="button" aria-haspopup="menu" aria-label="Select model, current deepseek-v3.2-250828-exp, reasoning effort Medium" aria-expanded="false" style="max-width: 240px;">
+              <span data-mss-provider-badge title="SiliconFlow-Aurora-CN">SiliconFlow-Aurora-CN</span>
+              <span class="_7KE1Ra_triggerLabel">deepseek-v3.2-250828-exp</span>
+              <span class="_7KE1Ra_triggerEffort">Medium</span>
+              <svg class="_7KE1Ra_chevron" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25 7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="narrow-note">按钮限宽 240px：供应商徽章先收缩省略（悬停看全名），模型名尽量完整显示</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
